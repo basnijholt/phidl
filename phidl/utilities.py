@@ -32,7 +32,7 @@ def write_lyp(filename, layerset):
             gds_datatype = layer.gds_datatype
             color = layer.color
 
-            name = "{}/{} - ".format(str(gds_layer), str(gds_datatype)) + layer.name
+            name = f"{str(gds_layer)}/{str(gds_datatype)} - " + layer.name
             if layer.description is not None:
                 name = name + " - (" + layer.description + ")"
 
@@ -83,9 +83,7 @@ def write_lyp(filename, layerset):
             # Writing line to specify layer name
             f.write("  <name>%s</name>\n" % name)
             # Writing line to specify source
-            f.write(
-                "  <source>{}/{}@1</source>\n".format(str(gds_layer), str(gds_datatype))
-            )
+            f.write(f"  <source>{str(gds_layer)}/{str(gds_datatype)}@1</source>\n")
             # Writing properties closer for specific layer
             f.write(" </properties>\n")
 
@@ -108,7 +106,7 @@ def load_lyp(filename):
 
     if filename[-4:] != ".lyp":
         filename = filename + ".lyp"
-    with open(filename, "r") as fx:
+    with open(filename) as fx:
         lyp_dict = xmltodict.parse(fx.read(), process_namespaces=True)
     # lyp files have a top level that just has one dict: layer-properties
     # That has multiple children 'properties', each for a layer. So it gives a list
@@ -160,7 +158,7 @@ def name2shortName(name_str):
         phidl.utilities.name2shortName = someOtherFunction(string)
     """
     if name_str is None:
-        raise IOError("This layer has no name")
+        raise OSError("This layer has no name")
     components = name_str.split(" - ")
     if len(components) > 1:
         short_name = components[1]
@@ -183,7 +181,7 @@ def name2description(name_str):
         phidl.utilities.name2description = someOtherFunction(string)
     """
     if name_str is None:
-        raise IOError("This layer has no name")
+        raise OSError("This layer has no name")
     components = name_str.split(" - ")
     description = ""
     if len(components) > 2:
